@@ -58,6 +58,26 @@ def dashboard():
         game=game
     )
 
+@app.route("/fabrica", methods=["GET", "POST"])
+def fabrica():
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    game = load_game()
+
+    if request.method == "POST":
+        ativa = request.form.get("ativa") == "on"
+
+        game["fabrica"]["ativa"] = ativa
+        save_game(game)
+
+        return redirect(url_for("fabrica"))
+
+    return render_template(
+        "fabrica.html",
+        fabrica=game["fabrica"]
+    )
+
 @app.route("/logout")
 def logout():
     session.pop("user", None)
