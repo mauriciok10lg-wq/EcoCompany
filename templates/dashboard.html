@@ -6,27 +6,27 @@
 <div class="cards">
   <div class="card">
     <h3>💰 Caixa</h3>
-    <p>R$ {{ caixa }}</p>
+    <p>R$ {{ game.caixa }}</p>
   </div>
 
   <div class="card">
     <h3>⚡ Energia</h3>
-    <p>{{ energia }} kWh</p>
+    <p>{{ game.energia }} kWh</p>
   </div>
 
   <div class="card">
     <h3>🌍 Índice Verde</h3>
-    <p>{{ indice_verde }}%</p>
+    <p>{{ game.indice_verde }}%</p>
   </div>
 
   <div class="card">
     <h3>🏢 Empresas</h3>
-    <p>{{ empresas }} ativas</p>
+    <p>{{ game.empresas }} ativas</p>
   </div>
 
   <div class="card">
     <h3>⛏️ Ferro em estoque</h3>
-    <p>{{ ferro }} unidades</p>
+    <p>{{ game.estoque.minerio }} unidades</p>
   </div>
 </div>
 
@@ -38,5 +38,12 @@
   <button>⛏️ Minerar Ferro (+10 ferro / -30 energia)</button>
 </a>
 
-{% endblock %}
+<hr>
 
+<h2>📅 Mês Atual: {{ game.mes_atual }}</h2>
+
+<form method="post" action="{{ url_for('avancar_mes') }}">
+  <button type="submit">⏭️ Avançar Mês</button>
+</form>
+
+{% endblock %}
