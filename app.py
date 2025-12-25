@@ -102,6 +102,10 @@ def dashboard():
     game = processar_producao(game)
     save_game(game)
 
+    game.setdefault("indice_verde", 100)
+game.setdefault("empresas", 1)
+game.setdefault("alerta", "")
+
     return render_template("dashboard.html", game=game)
 
 # ================= FÁBRICA =================
