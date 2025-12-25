@@ -1,28 +1,35 @@
 {
-  "caixa": 100000,
-  "energia": 5000,
+  "dinheiro": 10000,
+  "energia": 500,
+
   "estoque": {
-    "minerio": 200,
+    "minerio": 0,
     "aco": 0,
     "graos": 0
   },
+
   "fabrica": {
-    "ativa": true,
+    "ativa": false,
+    "nivel": 1,
     "consumo_minerio_hora": 5,
-    "consumo_energia_hora": 20,
+    "consumo_energia_hora": 10,
     "producao_aco_hora": 3,
-    "ultimo_calculo": 1735140000
+    "ultimo_calculo": 0
   },
+
   "mineracao": {
-    "ativa": true,
-    "consumo_energia_hora": 15,
-    "producao_minerio_hora": 4,
-    "ultimo_calculo": 1735140000
+    "ativa": false,
+    "nivel": 1,
+    "consumo_energia_hora": 8,
+    "producao_minerio_hora": 6,
+    "ultimo_calculo": 0
   },
+
   "fazenda": {
     "ativa": false,
+    "nivel": 1,
     "consumo_energia_hora": 5,
-    "producao_graos_hora": 6,
-    "ultimo_calculo": 1735140000
+    "producao_graos_hora": 4,
+    "ultimo_calculo": 0
   }
 }
