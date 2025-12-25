@@ -127,6 +127,25 @@ def fabrica():
 
     return render_template("fabrica.html", fabrica=fab)
 
+@app.route("/minerar-ferro")
+def minerar_ferro():
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    game = load_game()
+
+    if game["energia"] < 30:
+        game["alerta"] = "⚠️ Energia insuficiente para minerar ferro!"
+    else:
+        game["energia"] -= 30
+        game["estoque"]["minerio"] += 10
+        game["caixa"] += 100   # opcional: valor simbólico
+        game["indice_verde"] -= 1
+        game["alerta"] = "⛏️ Mineração realizada com sucesso!"
+
+    save_game(game)
+    return redirect(url_for("dashboard"))
+
 # ================= LOGOUT =================
 @app.route("/logout")
 def logout():
