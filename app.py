@@ -69,7 +69,6 @@ def avancar_mes():
         return redirect(url_for("login"))
 
     game = load_game()
-
     fabrica = game["fabrica"]
 
     if fabrica["ativa"]:
@@ -77,16 +76,17 @@ def avancar_mes():
             game["estoque"]["minerio"] >= fabrica["consumo_minerio"]
             and game["energia"] >= fabrica["consumo_energia"]
         ):
-            # Consumos
             game["estoque"]["minerio"] -= fabrica["consumo_minerio"]
             game["energia"] -= fabrica["consumo_energia"]
-
-            # Produção
             game["estoque"]["aco"] += fabrica["producao_aco"]
 
-            # Custos (exemplo simples)
-            custo_energia = fabrica["consumo_energia"] * 2  # R$2 por unidade
+            custo_energia = fabrica["consumo_energia"] * 2
             game["caixa"] -= custo_energia
+
+    game["mes_atual"] += 1
+    save_game(game)
+
+    return redirect(url_for("dashboard"))
 
     game["mes_atual"] += 1
     save_game(game)
