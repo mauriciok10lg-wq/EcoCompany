@@ -22,41 +22,25 @@ def dashboard():
         caixa=game["caixa"],
         energia=game["energia"],
         indice_verde=game["indice_verde"],
-        empresas=game["empresas"]
+        empresas=game["empresas"],
+        ferro=game["mineracao"]["ferro"]
     )
 
-# 🔘 BOTÃO PRODUZIR
-@app.route("/produzir")
-def produzir():
+# ⛏️ MINERAR FERRO
+@app.route("/minerar-ferro")
+def minerar_ferro():
     game = load_game_state()
 
-    if game["energia"] >= 10:
-        game["energia"] -= 10
-        game["caixa"] += 500
+    # custo da mineração
+    custo_energia = 30
+
+    if game["energia"] >= custo_energia:
+        game["energia"] -= custo_energia
+        game["mineracao"]["ferro"] += 10  # produz 10 unidades de ferro
 
     save_game_state(game)
     return redirect(url_for("dashboard"))
 
-# ⛏️ BOTÃO MINERAR
-@app.route("/minerar")
-def minerar():
-    game = load_game_state()
-
-    if game["energia"] >= 20:
-        game["energia"] -= 20
-        game["caixa"] += 800
-
-    save_game_state(game)
-    return redirect(url_for("dashboard"))
-
-# ⚡ BOTÃO COMPRAR ENERGIA
-@app.route("/comprar-energia")
-def comprar_energia():
-    game = load_game_state()
-
-    if game["caixa"] >= 1000:
-        game["caixa"] -= 1000
-        game["energia"] += 100
-
-    save_game_state(game)
-    return redirect(url_for("dashb_
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
