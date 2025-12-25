@@ -1,10 +1,15 @@
 {
-  "caixa": 125000,
-  "energia": 18500,
-  "indice_verde": 82,
-  "empresas": 4,
-
-  "mineracao": {
-    "ferro": 0
+  "mes_atual": 1,
+  "caixa": 100000,
+  "energia": 5000,
+  "estoque": {
+    "minerio": 200,
+    "aco": 0
+  },
+  "fabrica": {
+    "ativa": true,
+    "consumo_minerio": 100,
+    "consumo_energia": 500,
+    "producao_aco": 80
   }
 }
