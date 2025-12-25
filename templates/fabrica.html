@@ -21,36 +21,38 @@
 
   <hr>
 
-  <h3>⛏️ Consumo de Minério (por mês)</h3>
-  <input type="range"
-         name="consumo_minerio"
-         min="0"
-         max="500"
-         value="{{ fabrica.consumo_minerio }}"
-         oninput="minerioOutput.value = this.value">
-  <output id="minerioOutput">{{ fabrica.consumo_minerio }}</output> unidades
+  <h3>⚙️ Ajustes de Produção (por hora)</h3>
 
-  <hr>
+  <label>
+    🪨 Consumo de Minério:
+    <input type="range" min="0" max="50" step="1"
+           name="consumo_minerio"
+           value="{{ fabrica.consumo_minerio }}"
+           oninput="minerioValue.innerText = this.value">
+    <strong><span id="minerioValue">{{ fabrica.consumo_minerio }}</span></strong>
+  </label>
 
-  <h3>⚡ Consumo de Energia (kWh por mês)</h3>
-  <input type="range"
-         name="consumo_energia"
-         min="0"
-         max="2000"
-         value="{{ fabrica.consumo_energia }}"
-         oninput="energiaOutput.value = this.value">
-  <output id="energiaOutput">{{ fabrica.consumo_energia }}</output> kWh
+  <br><br>
 
-  <hr>
+  <label>
+    ⚡ Consumo de Energia:
+    <input type="range" min="0" max="100" step="1"
+           name="consumo_energia"
+           value="{{ fabrica.consumo_energia }}"
+           oninput="energiaValue.innerText = this.value">
+    <strong><span id="energiaValue">{{ fabrica.consumo_energia }}</span></strong>
+  </label>
 
-  <h3>🏗️ Produção de Aço (por mês)</h3>
-  <input type="range"
-         name="producao_aco"
-         min="0"
-         max="300"
-         value="{{ fabrica.producao_aco }}"
-         oninput="acoOutput.value = this.value">
-  <output id="acoOutput">{{ fabrica.producao_aco }}</output> unidades
+  <br><br>
+
+  <label>
+    🔩 Produção de Aço:
+    <input type="range" min="0" max="20" step="1"
+           name="producao_aco"
+           value="{{ fabrica.producao_aco }}"
+           oninput="acoValue.innerText = this.value">
+    <strong><span id="acoValue">{{ fabrica.producao_aco }}</span></strong>
+  </label>
 
   <hr>
 
