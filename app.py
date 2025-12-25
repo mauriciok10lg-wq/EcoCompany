@@ -1,6 +1,8 @@
 from flask import Flask, render_template, redirect, url_for, request, session
 from werkzeug.security import check_password_hash
-import os, json, time
+import os
+import json
+import time
 
 app = Flask(__name__)
 app.secret_key = "ecoCompany_super_secret_key"
@@ -21,7 +23,7 @@ def save_game(data):
     with open(GAME_STATE_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
-# ================= PRODUÇÃO AUTOMÁTICA =================
+# ================= PRODUÇÃO AUTOMÁTICA 24H =================
 def processar_producao(game):
     agora = int(time.time())
 
