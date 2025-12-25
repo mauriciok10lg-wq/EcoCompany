@@ -2,6 +2,7 @@
   "mes_atual": 1,
   "caixa": 100000,
   "energia": 5000,
+  "alerta": "",
   "estoque": {
     "minerio": 200,
     "aco": 0
