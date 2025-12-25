@@ -58,28 +58,6 @@ def dashboard():
         game=game
     )
 
-@app.route("/fabrica", methods=["GET", "POST"])
-def fabrica():
-    if "user" not in session:
-        return redirect(url_for("login"))
-
-    game = load_game()
-    fabrica = game["fabrica"]
-
-    if request.method == "POST":
-        fabrica["ativa"] = "ativa" in request.form
-
-        # se vierem os campos (painel avançado)
-        if "consumo_minerio" in request.form:
-            fabrica["consumo_minerio"] = int(request.form["consumo_minerio"])
-            fabrica["consumo_energia"] = int(request.form["consumo_energia"])
-            fabrica["producao_aco"] = int(request.form["producao_aco"])
-
-        save_game(game)
-        return redirect(url_for("fabrica"))
-
-    return render_template("fabrica.html", fabrica=fabrica)
-
 
 @app.route("/logout")
 def logout():
@@ -97,24 +75,27 @@ def avancar_mes():
     # limpa alerta anterior
     game["alerta"] = ""
 
-    if fabrica["ativa"]:
-        if game["estoque"]["minerio"] < fabrica["consumo_minerio"]:
-            game["alerta"] = "⛔ Produção parada: minério insuficiente"
-        elif game["energia"] < fabrica["consumo_energia"]:
-            game["alerta"] = "⛔ Produção parada: energia insuficiente"
-        else:
-            # Consumos
-            game["estoque"]["minerio"] -= fabrica["consumo_minerio"]
-            game["energia"] -= fabrica["consumo_energia"]
+    @app.route("/fabrica", methods=["GET", "POST"])
+def fabrica():
+    if "user" not in session:
+        return redirect(url_for("login"))
 
-            # Produção
-            game["estoque"]["aco"] += fabrica["producao_aco"]
+    game = load_game()
+    fabrica = game["fabrica"]
 
-            # Custos
-            custo_energia = fabrica["consumo_energia"] * 2
-            game["caixa"] -= custo_energia
+    if request.method == "POST":
+        fabrica["ativa"] = "ativa" in request.form
 
-            game["alerta"] = "✅ Produção realizada com sucesso"
+        # Se vierem os campos do formulário avançado
+        if "consumo_minerio" in request.form:
+            fabrica["consumo_minerio"] = int(request.form["consumo_minerio"])
+            fabrica["consumo_energia"] = int(request.form["consumo_energia"])
+            fabrica["producao_aco"] = int(request.form["producao_aco"])
+
+        save_game(game)
+        return redirect(url_for("fabrica"))
+
+    return render_template("fabrica.html", fabrica=fabrica)
 
     game["mes_atual"] += 1
     save_game(game)
