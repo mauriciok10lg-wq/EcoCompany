@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>🏭 Fábrica</h1>
+
+<form method="post">
+
+  <label>Consumo de Minério por mês:</label><br>
+  <input type="number" name="consumo_minerio"
+         value="{{ fabrica.consumo_minerio }}" required><br><br>
+
+  <label>Consumo de Energia por mês:</label><br>
+  <input type="number" name="consumo_energia"
+         value="{{ fabrica.consumo_energia }}" required><br><br>
+
+  <label>Produção de Aço por mês:</label><br>
+  <input type="number" name="producao_aco"
+         value="{{ fabrica.producao_aco }}" required><br><br>
+
+  <label>
+    <input type="checkbox" name="ativa"
+      {% if fabrica.ativa %}checked{% endif %}>
+    Fábrica ativa
+  </label><br><br>
+
+  <button type="submit">💾 Salvar Configuração</button>
+</form>
+
+<a href="/dashboard">⬅ Voltar</a>
+{% endblock %}
