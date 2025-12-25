@@ -102,10 +102,6 @@ def dashboard():
     game = processar_producao(game)
     save_game(game)
 
-    game.setdefault("indice_verde", 100)
-game.setdefault("empresas", 1)
-game.setdefault("alerta", "")
-
     return render_template("dashboard.html", game=game)
 
 # ================= FÁBRICA =================
@@ -127,65 +123,11 @@ def fabrica():
 
     return render_template("fabrica.html", fabrica=fab)
 
-@app.route("/minerar-ferro")
-def minerar_ferro():
-    if "user" not in session:
-        return redirect(url_for("login"))
-
-    game = load_game()
-
-    if game["energia"] < 30:
-        game["alerta"] = "⚠️ Energia insuficiente para minerar ferro!"
-    else:
-        game["energia"] -= 30
-        game["estoque"]["minerio"] += 10
-        game["caixa"] += 100   # opcional: valor simbólico
-        game["indice_verde"] -= 1
-        game["alerta"] = "⛏️ Mineração realizada com sucesso!"
-
-    save_game(game)
-    return redirect(url_for("dashboard"))
-
 # ================= LOGOUT =================
 @app.route("/logout")
 def logout():
     session.pop("user", None)
     return redirect(url_for("login"))
-
-@app.route("/mercado", methods=["GET", "POST"])
-def mercado():
-    if "user" not in session:
-        return redirect(url_for("login"))
-
-    game = load_game()
-
-    precos = {
-        "minerio": {"buy": 50, "sell": 40},
-        "aco": {"buy": 120, "sell": 100},
-        "graos": {"buy": 30, "sell": 25}
-    }
-
-    if request.method == "POST":
-        item = request.form["item"]
-        acao = request.form["acao"]
-        qtd = int(request.form["quantidade"])
-
-        if acao == "comprar":
-            custo = precos[item]["buy"] * qtd
-            if game["dinheiro"] >= custo:
-                game["dinheiro"] -= custo
-                game["estoque"][item] += qtd
-
-        elif acao == "vender":
-            if game["estoque"][item] >= qtd:
-                ganho = precos[item]["sell"] * qtd
-                game["estoque"][item] -= qtd
-                game["dinheiro"] += ganho
-
-        save_game(game)
-        return redirect(url_for("mercado"))
-
-    return render_template("mercado.html", game=game, precos=precos)
 
 # ================= START =================
 if __name__ == "__main__":
