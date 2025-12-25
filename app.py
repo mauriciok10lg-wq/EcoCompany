@@ -46,6 +46,9 @@ def logout():
     session.pop("user", None)
     return redirect(url_for("login"))
 
+from werkzeug.security import generate_password_hash
+print("HASH_ADMIN:", generate_password_hash("1234"))
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
