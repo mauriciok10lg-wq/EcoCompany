@@ -39,14 +39,59 @@ def dashboard():
     if "user" not in session:
         return redirect(url_for("login"))
 
-    return render_template("dashboard.html", user=session["user"])
+    game = load_game()
+
+    return render_template(
+        "dashboard.html",
+        user=session["user"],
+        game=game
+    )
+
 
 @app.route("/logout")
 def logout():
     session.pop("user", None)
     return redirect(url_for("login"))
 
+GAME_STATE_FILE = "game_state.json"
 
+def load_game():
+    with open(GAME_STATE_FILE, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+def save_game(data):
+    with open(GAME_STATE_FILE, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+
+@app.route("/avancar_mes", methods=["POST"])
+def avancar_mes():
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    game = load_game()
+
+    fabrica = game["fabrica"]
+
+    if fabrica["ativa"]:
+        if (
+            game["estoque"]["minerio"] >= fabrica["consumo_minerio"]
+            and game["energia"] >= fabrica["consumo_energia"]
+        ):
+            # Consumos
+            game["estoque"]["minerio"] -= fabrica["consumo_minerio"]
+            game["energia"] -= fabrica["consumo_energia"]
+
+            # Produção
+            game["estoque"]["aco"] += fabrica["producao_aco"]
+
+            # Custos (exemplo simples)
+            custo_energia = fabrica["consumo_energia"] * 2  # R$2 por unidade
+            game["caixa"] -= custo_energia
+
+    game["mes_atual"] += 1
+    save_game(game)
+
+    return redirect(url_for("dashboard")
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
