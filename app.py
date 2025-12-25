@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, request, session
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import check_password_hash
 import os
 import json
 
@@ -14,10 +14,6 @@ def load_users():
     with open(USERS_FILE, "r", encoding="utf-8") as f:
         return json.load(f)
 
-def save_users(data):
-    with open(USERS_FILE, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2, ensure_ascii=False)
-
 def load_game():
     with open(GAME_STATE_FILE, "r", encoding="utf-8") as f:
         return json.load(f)
@@ -26,7 +22,7 @@ def save_game(data):
     with open(GAME_STATE_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
-# ---------- rotas ----------
+# ---------- login ----------
 @app.route("/", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -45,37 +41,17 @@ def login():
 
     return render_template("login.html")
 
+# ---------- dashboard ----------
 @app.route("/dashboard")
 def dashboard():
     if "user" not in session:
         return redirect(url_for("login"))
 
     game = load_game()
+    return render_template("dashboard.html", game=game)
 
-    return render_template(
-        "dashboard.html",
-        user=session["user"],
-        game=game
-    )
-
-
-@app.route("/logout")
-def logout():
-    session.pop("user", None)
-    return redirect(url_for("login"))
-
-@app.route("/avancar_mes", methods=["POST"])
-def avancar_mes():
-    if "user" not in session:
-        return redirect(url_for("login"))
-
-    game = load_game()
-    fabrica = game["fabrica"]
-
-    # limpa alerta anterior
-    game["alerta"] = ""
-
-    @app.route("/fabrica", methods=["GET", "POST"])
+# ---------- fábrica ----------
+@app.route("/fabrica", methods=["GET", "POST"])
 def fabrica():
     if "user" not in session:
         return redirect(url_for("login"))
@@ -86,7 +62,6 @@ def fabrica():
     if request.method == "POST":
         fabrica["ativa"] = "ativa" in request.form
 
-        # Se vierem os campos do formulário avançado
         if "consumo_minerio" in request.form:
             fabrica["consumo_minerio"] = int(request.form["consumo_minerio"])
             fabrica["consumo_energia"] = int(request.form["consumo_energia"])
@@ -97,30 +72,41 @@ def fabrica():
 
     return render_template("fabrica.html", fabrica=fabrica)
 
-    game["mes_atual"] += 1
-    save_game(game)
-
-    return redirect(url_for("dashboard"))
-
-@app.route("/fabrica", methods=["GET", "POST"])
-def fabrica():
+# ---------- avançar mês ----------
+@app.route("/avancar_mes", methods=["POST"])
+def avancar_mes():
     if "user" not in session:
         return redirect(url_for("login"))
 
     game = load_game()
     fabrica = game["fabrica"]
+    game["alerta"] = ""
 
-    if request.method == "POST":
-        fabrica["consumo_minerio"] = int(request.form["consumo_minerio"])
-        fabrica["consumo_energia"] = int(request.form["consumo_energia"])
-        fabrica["producao_aco"] = int(request.form["producao_aco"])
-        fabrica["ativa"] = "ativa" in request.form
+    if fabrica["ativa"]:
+        if game["estoque"]["minerio"] < fabrica["consumo_minerio"]:
+            game["alerta"] = "⛔ Produção parada: minério insuficiente"
+        elif game["energia"] < fabrica["consumo_energia"]:
+            game["alerta"] = "⛔ Produção parada: energia insuficiente"
+        else:
+            game["estoque"]["minerio"] -= fabrica["consumo_minerio"]
+            game["energia"] -= fabrica["consumo_energia"]
+            game["estoque"]["aco"] += fabrica["producao_aco"]
 
-        save_game(game)
-        return redirect(url_for("fabrica"))
+            custo = fabrica["consumo_energia"] * 2
+            game["caixa"] -= custo
 
-    return render_template("fabrica.html", fabrica=fabrica)
+            game["alerta"] = "✅ Produção realizada com sucesso"
 
+    game["mes_atual"] += 1
+    save_game(game)
+
+    return redirect(url_for("dashboard"))
+
+# ---------- logout ----------
+@app.route("/logout")
+def logout():
+    session.pop("user", None)
+    return redirect(url_for("login"))
 
 # ---------- start ----------
 if __name__ == "__main__":
