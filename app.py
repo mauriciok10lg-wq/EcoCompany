@@ -129,6 +129,41 @@ def logout():
     session.pop("user", None)
     return redirect(url_for("login"))
 
+@app.route("/mercado", methods=["GET", "POST"])
+def mercado():
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    game = load_game()
+
+    precos = {
+        "minerio": {"buy": 50, "sell": 40},
+        "aco": {"buy": 120, "sell": 100},
+        "graos": {"buy": 30, "sell": 25}
+    }
+
+    if request.method == "POST":
+        item = request.form["item"]
+        acao = request.form["acao"]
+        qtd = int(request.form["quantidade"])
+
+        if acao == "comprar":
+            custo = precos[item]["buy"] * qtd
+            if game["dinheiro"] >= custo:
+                game["dinheiro"] -= custo
+                game["estoque"][item] += qtd
+
+        elif acao == "vender":
+            if game["estoque"][item] >= qtd:
+                ganho = precos[item]["sell"] * qtd
+                game["estoque"][item] -= qtd
+                game["dinheiro"] += ganho
+
+        save_game(game)
+        return redirect(url_for("mercado"))
+
+    return render_template("mercado.html", game=game, precos=precos)
+
 # ================= START =================
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
