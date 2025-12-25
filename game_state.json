@@ -3,7 +3,7 @@
   "energia": 5000,
 
   "estoque": {
-    "minerio"
+    "minerio": 200,
     "aco": 0,
     "graos": 0
   },
