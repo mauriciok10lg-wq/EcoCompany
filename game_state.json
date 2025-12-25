@@ -1,16 +1,11 @@
-{
+
   "caixa": 100000,
   "energia": 5000,
-  "indice_verde": 85,
-  "empresas": 1,
-  "alerta": "",
-
   "estoque": {
     "minerio": 200,
     "aco": 0,
     "graos": 0
   },
-
   "fabrica": {
     "ativa": true,
     "consumo_minerio_hora": 5,
@@ -18,14 +13,12 @@
     "producao_aco_hora": 3,
     "ultimo_calculo": 1735140000
   },
-
   "mineracao": {
     "ativa": true,
     "consumo_energia_hora": 15,
     "producao_minerio_hora": 4,
     "ultimo_calculo": 1735140000
   },
-
   "fazenda": {
     "ativa": false,
     "consumo_energia_hora": 5,
