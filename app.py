@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for
 import os
 import json
 
@@ -6,19 +6,10 @@ app = Flask(__name__)
 
 DATA_FILE = "game_state.json"
 
-# 🔹 Carregar dados do jogo
 def load_game_state():
-    if not os.path.exists(DATA_FILE):
-        return {
-            "caixa": 0,
-            "energia": 0,
-            "indice_verde": 0,
-            "empresas": 0
-        }
     with open(DATA_FILE, "r", encoding="utf-8") as f:
         return json.load(f)
 
-# 🔹 Salvar dados do jogo
 def save_game_state(data):
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
@@ -34,6 +25,38 @@ def dashboard():
         empresas=game["empresas"]
     )
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+# 🔘 BOTÃO PRODUZIR
+@app.route("/produzir")
+def produzir():
+    game = load_game_state()
+
+    if game["energia"] >= 10:
+        game["energia"] -= 10
+        game["caixa"] += 500
+
+    save_game_state(game)
+    return redirect(url_for("dashboard"))
+
+# ⛏️ BOTÃO MINERAR
+@app.route("/minerar")
+def minerar():
+    game = load_game_state()
+
+    if game["energia"] >= 20:
+        game["energia"] -= 20
+        game["caixa"] += 800
+
+    save_game_state(game)
+    return redirect(url_for("dashboard"))
+
+# ⚡ BOTÃO COMPRAR ENERGIA
+@app.route("/comprar-energia")
+def comprar_energia():
+    game = load_game_state()
+
+    if game["caixa"] >= 1000:
+        game["caixa"] -= 1000
+        game["energia"] += 100
+
+    save_game_state(game)
+    return redirect(url_for("dashb_
