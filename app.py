@@ -71,11 +71,15 @@ def avancar_mes():
     game = load_game()
     fabrica = game["fabrica"]
 
+    # limpa alerta anterior
+    game["alerta"] = ""
+
     if fabrica["ativa"]:
-        if (
-            game["estoque"]["minerio"] >= fabrica["consumo_minerio"]
-            and game["energia"] >= fabrica["consumo_energia"]
-        ):
+        if game["estoque"]["minerio"] < fabrica["consumo_minerio"]:
+            game["alerta"] = "⛔ Produção parada: minério insuficiente"
+        elif game["energia"] < fabrica["consumo_energia"]:
+            game["alerta"] = "⛔ Produção parada: energia insuficiente"
+        else:
             # Consumos
             game["estoque"]["minerio"] -= fabrica["consumo_minerio"]
             game["energia"] -= fabrica["consumo_energia"]
@@ -87,10 +91,13 @@ def avancar_mes():
             custo_energia = fabrica["consumo_energia"] * 2
             game["caixa"] -= custo_energia
 
+            game["alerta"] = "✅ Produção realizada com sucesso"
+
     game["mes_atual"] += 1
     save_game(game)
 
     return redirect(url_for("dashboard"))
+
 
 # ---------- start ----------
 if __name__ == "__main__":
