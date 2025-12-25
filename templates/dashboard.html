@@ -23,22 +23,20 @@
     <h3>🏢 Empresas</h3>
     <p>{{ empresas }} ativas</p>
   </div>
+
+  <div class="card">
+    <h3>⛏️ Ferro em estoque</h3>
+    <p>{{ ferro }} unidades</p>
+  </div>
 </div>
 
 <hr>
 
-<h2>Ações</h2>
+<h2>Mineração</h2>
 
-<a href="/produzir">
-  <button>🏭 Produzir (+R$500 / -10 energia)</button>
-</a>
-
-<a href="/minerar">
-  <button>⛏️ Minerar (+R$800 / -20 energia)</button>
-</a>
-
-<a href="/comprar-energia">
-  <button>⚡ Comprar Energia (-R$1000 / +100 energia)</button>
+<a href="/minerar-ferro">
+  <button>⛏️ Minerar Ferro (+10 ferro / -30 energia)</button>
 </a>
 
 {% endblock %}
+
