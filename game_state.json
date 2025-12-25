@@ -2,5 +2,9 @@
   "caixa": 125000,
   "energia": 18500,
   "indice_verde": 82,
-  "empresas": 4
+  "empresas": 4,
+
+  "mineracao": {
+    "ferro": 0
+  }
 }
