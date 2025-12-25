@@ -2,6 +2,8 @@
   "mes_atual": 1,
   "caixa": 100000,
   "energia": 5000,
+  "indice_verde": 75,
+  "empresas": 1,
   "alerta": "",
   "estoque": {
     "minerio": 200,
