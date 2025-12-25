@@ -64,19 +64,22 @@ def fabrica():
         return redirect(url_for("login"))
 
     game = load_game()
+    fabrica = game["fabrica"]
 
     if request.method == "POST":
-        ativa = request.form.get("ativa") == "on"
+        fabrica["ativa"] = "ativa" in request.form
 
-        game["fabrica"]["ativa"] = ativa
+        # se vierem os campos (painel avançado)
+        if "consumo_minerio" in request.form:
+            fabrica["consumo_minerio"] = int(request.form["consumo_minerio"])
+            fabrica["consumo_energia"] = int(request.form["consumo_energia"])
+            fabrica["producao_aco"] = int(request.form["producao_aco"])
+
         save_game(game)
-
         return redirect(url_for("fabrica"))
 
-    return render_template(
-        "fabrica.html",
-        fabrica=game["fabrica"]
-    )
+    return render_template("fabrica.html", fabrica=fabrica)
+
 
 @app.route("/logout")
 def logout():
