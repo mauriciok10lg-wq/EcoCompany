@@ -3,6 +3,18 @@
 {% block content %}
 <h1>Visão Geral</h1>
 
+{% if game.alerta %}
+  <div style="
+    background:#fff3cd;
+    border:1px solid #ffeeba;
+    padding:12px;
+    margin-bottom:15px;
+    font-weight:bold;
+  ">
+    {{ game.alerta }}
+  </div>
+{% endif %}
+
 <div class="cards">
   <div class="card">
     <h3>💰 Caixa</h3>
