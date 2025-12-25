@@ -5,26 +5,32 @@
 
 <form method="post">
 
-  <label>Consumo de Minério por mês:</label><br>
-  <input type="number" name="consumo_minerio"
-         value="{{ fabrica.consumo_minerio }}" required><br><br>
-
-  <label>Consumo de Energia por mês:</label><br>
-  <input type="number" name="consumo_energia"
-         value="{{ fabrica.consumo_energia }}" required><br><br>
-
-  <label>Produção de Aço por mês:</label><br>
-  <input type="number" name="producao_aco"
-         value="{{ fabrica.producao_aco }}" required><br><br>
+  <p>
+    <strong>Status:</strong>
+    {% if fabrica.ativa %}
+      <span style="color:green">ATIVA</span>
+    {% else %}
+      <span style="color:red">DESLIGADA</span>
+    {% endif %}
+  </p>
 
   <label>
-    <input type="checkbox" name="ativa"
-      {% if fabrica.ativa %}checked{% endif %}>
-    Fábrica ativa
-  </label><br><br>
+    <input type="checkbox" name="ativa" {% if fabrica.ativa %}checked{% endif %}>
+    Ativar produção
+  </label>
 
-  <button type="submit">💾 Salvar Configuração</button>
+  <hr>
+
+  <h3>📦 Consumo mensal</h3>
+  <p>⛏️ Minério: {{ fabrica.consumo_minerio }}</p>
+  <p>⚡ Energia: {{ fabrica.consumo_energia }} kWh</p>
+
+  <h3>🏗️ Produção mensal</h3>
+  <p>🧱 Aço: {{ fabrica.producao_aco }} unidades</p>
+
+  <br>
+
+  <button type="submit">💾 Salvar configuração</button>
 </form>
 
-<a href="/dashboard">⬅ Voltar</a>
 {% endblock %}
